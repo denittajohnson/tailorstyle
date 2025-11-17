@@ -18,15 +18,14 @@ RUN pip install --no-cache-dir -r /tmp/requirements.txt
 # Switch back to the Odoo user
 USER odoo
 
-# CRITICAL FIX: The startup command must be defined here, NOT in render.yaml.
-# This command runs two Odoo processes: first to initialize the database, 
-# and second to start the web server for running the application.
+# CRITICAL FIX: Changed command line args to use underscores (db_host, db_port, etc.) 
+# This is the format Odoo traditionally expects when passed as a command-line option.
 CMD odoo \
   -c /etc/odoo/odoo.conf \
-  --db-host=$DB_HOST \
-  --db-port=$DB_PORT \
-  --db-user=$DB_USER \
-  --db-password=$DB_PASSWORD \
+  --db_host=$DB_HOST \
+  --db_port=$DB_PORT \
+  --db_user=$DB_USER \
+  --db_password=$DB_PASSWORD \
   --database=$DB_NAME \
   --addons-path=/usr/lib/python3/dist-packages/odoo/addons,/mnt/extra-addons \
   --init=base,web,website,tailorstyle_management,tailorstyle_website \
@@ -34,9 +33,9 @@ CMD odoo \
   && \
   odoo \
   -c /etc/odoo/odoo.conf \
-  --db-host=$DB_HOST \
-  --db-port=$DB_PORT \
-  --db-user=$DB_USER \
-  --db-password=$DB_PASSWORD \
+  --db_host=$DB_HOST \
+  --db_port=$DB_PORT \
+  --db_user=$DB_USER \
+  --db_password=$DB_PASSWORD \
   --database=$DB_NAME \
   --addons-path=/usr/lib/python3/dist-packages/odoo/addons,/mnt/extra-addons
