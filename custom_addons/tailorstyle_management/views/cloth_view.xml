@@ -1,0 +1,64 @@
+<odoo>
+    <!-- Cloth Tree View -->
+    <record id="view_tailorstyle_cloth_tree" model="ir.ui.view">
+        <field name="name">tailorstyle.cloth.tree</field>
+        <field name="model">tailorstyle.cloth</field>
+        <field name="arch" type="xml">
+            <tree string="Cloth Details">
+                <field name="cloth_code"/>
+                <field name="name"/>
+                <field name="price"/>
+                <field name="initial_stock" string="Stock"/>
+                <field name="stock" string="Available Stock"/>
+                <field name="material"/>
+                <field name="comments"/>
+                <field name="allow_bubbled_option"/>
+                <field name="show_in_website" string="Visible" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Cloth Form View -->
+    <record id="view_tailorstyle_cloth_form" model="ir.ui.view">
+        <field name="name">tailorstyle.cloth.form</field>
+        <field name="model">tailorstyle.cloth</field>
+        <field name="arch" type="xml">
+            <form string="Cloth Details">
+                <sheet>
+                    <div style="max-width:600px; margin:auto; border:1px solid #ddd; padding:20px; border-radius:10px; background:#fafafa; box-sizing:border-box;">
+                        <!-- Images -->
+                        <group col="2" style="margin-bottom:15px;">
+                            <field name="main_image" widget="image" options="{'size': (150,150)}"/>
+                            <field name="sub_image" widget="image" options="{'size': (150,150)}"/>
+                        </group>
+
+                        <!-- Name & Material -->
+                        <group col="2" style="margin-bottom:15px;">
+                            <field name="name" placeholder="Name"/>
+                            <field name="material" placeholder="Material"/>
+                        </group>
+
+                        <!-- Price & Stock -->
+                        <group col="2" style="margin-bottom:15px;">
+                            <field name="price" placeholder="Price"/>
+                            <field name="stock" string="Available Stock" placeholder="Stock"/>
+                        </group>
+
+                        <!-- Comments -->
+                        <group style="margin-bottom:15px;"><field name="comments" placeholder="Comments"/></group>
+
+                        <!-- Enable Bubbled Option -->
+                        <group style="margin-bottom:15px;"><field name="allow_bubbled_option" string="Enable"/></group>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Cloth Action -->
+    <record id="action_tailorstyle_cloth" model="ir.actions.act_window">
+        <field name="name">Cloth Details</field>
+        <field name="res_model">tailorstyle.cloth</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

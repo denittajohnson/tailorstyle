@@ -1,0 +1,11 @@
+psycopg2
+babel
+passlib
+pillow
+lxml
+werkzeug
+python-dateutil
+reportlab
+psutil
+widgetsnbextension
+num2words

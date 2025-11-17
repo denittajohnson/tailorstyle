@@ -1,0 +1,25 @@
+<odoo>
+    <!-- User ID Sequence -->
+    <record id="seq_user_id" model="ir.sequence">
+        <field name="name">User ID</field>
+        <field name="code">tailorstyle.user</field>
+        <field name="prefix">U-</field>
+        <field name="padding">4</field>
+    </record>
+
+    <!-- Order ID Sequence -->
+    <record id="seq_order_id" model="ir.sequence">
+        <field name="name">Order ID</field>
+        <field name="code">tailorstyle.order</field>
+        <field name="prefix">O-</field>
+        <field name="padding">4</field>
+    </record>
+
+    <!-- Cloth ID Sequence -->
+    <record id="seq_cloth_id" model="ir.sequence">
+        <field name="name">Cloth ID</field>
+        <field name="code">tailorstyle.cloth</field>
+        <field name="prefix">C-</field>
+        <field name="padding">4</field>
+    </record>
+</odoo>

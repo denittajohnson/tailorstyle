@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template t-name="tailorstyle_website.order_page">
+
+        <style>
+            .order-box {
+                max-width: 450px;
+                margin: 40px auto;
+                padding: 25px;
+                border: 3px solid #001f5c; /* dark blue border */
+                border-radius: 12px;
+                background: #f7faff;
+                text-align: center;
+            }
+
+            .order-img {
+                width: 220px;
+                height: auto;
+                border-radius: 8px;
+                margin-bottom: 10px;
+            }
+
+            .order-input {
+                width: 100%;
+                padding: 10px;
+                margin-top: 10px;
+                border-radius: 6px;
+                border: 1px solid #aaa;
+            }
+
+            .order-row {
+                display: flex;
+                justify-content: space-between;
+                gap: 10px;
+                margin-top: 10px;
+                align-items: center;
+            }
+
+            .order-btn-submit {
+                background: #001f5c !important;
+                color: white !important;
+                width: 70%;
+                padding: 12px;
+                border-radius: 8px;
+                font-weight: bold;
+                margin-top: 18px;
+                text-align: center;
+            }
+
+            @media (max-width: 480px) {
+                .order-box {
+                    max-width: 90%;
+                }
+
+                .order-row {
+                    flex-direction: column;
+                }
+
+                .order-btn-submit {
+                    width: 100%;
+                }
+            }
+        </style>
+
+        <!-- SUCCESS BOX -->
+        <t t-if="order_success">
+            <div style="
+                max-width: 450px;
+                margin: 60px auto;
+                padding: 30px;
+                background: #001f5c;
+                border-radius: 15px;
+                text-align: center;
+                color: white;
+                box-shadow: 0px 0px 15px rgba(0,0,0,0.3);
+            ">
+                <h2 style="font-weight: bold;">Order Placed Successfully!</h2>
+
+                <p style="margin-top:10px; font-size:17px;">
+                    Your order <strong><t t-esc="order.order_id"/></strong> for
+                    <strong><t t-esc="order.cloth_id.name"/></strong> has been placed.
+                </p>
+
+                <p style="margin-top:5px;">
+                    Status: <strong><t t-esc="order.status"/></strong>
+                </p>
+
+                <a href="/collections"
+                   style="display:block; margin-top:20px;
+                   background:white; color:#001f5c;
+                   padding:10px; border-radius:8px; font-weight:bold; text-decoration: none;">
+                   Go to Home
+                </a>
+
+                <a t-att-href="'/my_orders?phone=%s' % order.user_id.phone"
+                   style="display:block; margin-top:10px;
+                   background:white; color:#001f5c;
+                   padding:10px; border-radius:8px; font-weight:bold; text-decoration: none;">
+                   View My Orders
+                </a>
+            </div>
+        </t>
+
+        <!-- ORDER FORM -->
+        <t t-if="not order_success">
+
+            <div class="order-box">
+
+                <!-- Cloth Image -->
+                <img t-att-src="'/web/image/tailorstyle.cloth/%s/main_image' % cloth.id"
+                     class="order-img"/>
+
+                <!-- Cloth Name -->
+                <h3 style="font-weight:bold; color:#001f5c;">
+                    <t t-esc="cloth.name"/>
+                </h3>
+
+                <!-- Cloth Price -->
+                <p style="font-size:18px; font-weight:600;">₹ <t t-esc="cloth.price"/></p>
+
+                <t t-if="error">
+                    <p style="color:red; font-weight:bold;"><t t-esc="error"/></p>
+                </t>
+
+                <!-- Order Form -->
+                <form action="/order/submit" method="post">
+
+                    <input type="hidden" name="cloth_id" t-att-value="cloth.id"/>
+
+                    <!-- Name -->
+                    <input type="text" name="name" class="order-input"
+                           placeholder="Enter your name" required="required"/>
+
+                    <!-- Phone -->
+                    <input type="text" name="phone" class="order-input"
+                           placeholder="Phone (10 digits)" pattern="\d{10}"
+                           title="10-digit phone number" required="required"/>
+
+                    <!-- Urgent + Date -->
+                    <div class="order-row">
+                        <label style="display:flex; align-items:center; gap:5px; white-space:nowrap;">
+                            <input type="checkbox" name="urgent" id="urgentCheck"/>
+                            Urgent?
+                        </label>
+
+                        <input type="date" name="urgent_date" id="dateNeeded"
+                               class="order-input" style="margin-top:0;" required="required"/>
+                    </div>
+
+                    <!-- Bubbled Option -->
+                    <t t-if="cloth.allow_bubbled_option">
+                        <select name="bubbled" class="order-input" required="required">
+                            <option value="disabled selected" style="color: grey;">Choose the cloth to be stitched?</option>
+                            <option value="nighty">Nighty</option>
+                            <option value="nightdress">Night Dress</option>
+                            <option value="frocknighty">Frock Nighty</option>
+                            <option value="churidar">Churidar</option>
+                            <option value="others">Others</option>
+                        </select>
+                    </t>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="order-btn-submit">
+                        Place Order
+                    </button>
+
+                </form>
+            </div>
+
+            <!-- SCRIPT -->
+            <script>
+                <![CDATA[
+                (function() {
+                    const urgentCheck = document.getElementById('urgentCheck');
+                    const dateInput = document.getElementById('dateNeeded');
+
+                    dateInput.disabled = !urgentCheck.checked;
+
+                    const today = new Date();
+                    const yyyy = today.getFullYear();
+                    const mm = String(today.getMonth() + 1).padStart(2, '0');
+                    const dd = String(today.getDate()).padStart(2, '0');
+                    dateInput.min = yyyy + '-' + mm + '-' + dd;
+
+                    urgentCheck.addEventListener('change', function() {
+                        dateInput.disabled = !urgentCheck.checked;
+                        if (urgentCheck.checked && !dateInput.value) {
+                            dateInput.value = dateInput.min;
+                        }
+                    });
+                })();
+                ]]>
+            </script>
+
+        </t>
+
+    </template>
+</odoo>
+
+
+
+

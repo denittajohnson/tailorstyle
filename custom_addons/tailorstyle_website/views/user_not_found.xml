@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template t-name="tailorstyle_website.user_not_found">
+
+        <style>
+            /* Center the box on screen */
+            .error-wrapper {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                padding: 20px;
+            }
+
+            .error-box {
+                width: 100%;
+                max-width: 450px;
+                padding: 30px;
+                background: #8B0000; /* Dark Red */
+                border-radius: 12px;
+                color: white;
+                text-align: center;
+            }
+
+            .error-box a {
+                text-decoration: none !important;
+            }
+
+            .register-link {
+                color: yellow !important;
+                font-weight: bold;
+            }
+
+            .error-bottom-row {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 25px;
+            }
+
+            .error-bottom-row a {
+                color: yellow !important;
+                font-weight: bold;
+            }
+
+            /* Responsive */
+            @media (max-width: 480px) {
+                .error-box {
+                    padding: 22px;
+                }
+
+                .error-bottom-row {
+                    flex-direction: column;
+                    gap: 12px;
+                    text-align: center;
+                }
+            }
+        </style>
+
+        <div class="error-wrapper">
+
+            <div class="error-box">
+
+                <h2>User Not Found</h2>
+                <p>Incorrect Credentials</p>
+
+                <p>
+                    Please 
+                    <a href="/register" class="register-link">register</a> 
+                    first
+                </p>
+
+                <!-- Bottom Buttons (Left & Right) -->
+                <div class="error-bottom-row">
+                    <a href="/">Back to Home</a>
+                    <a href="/collections">Back to Collections</a>
+                </div>
+
+            </div>
+
+        </div>
+
+    </template>
+</odoo>
+
+

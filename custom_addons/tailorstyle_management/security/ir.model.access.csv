@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_tailorstyle_user,access_tailorstyle_user,model_tailorstyle_user,base.group_user,1,1,1,1
+access_tailorstyle_cloth,access_tailorstyle_cloth,model_tailorstyle_cloth,base.group_user,1,1,1,1
+access_tailorstyle_order,access_tailorstyle_order,model_tailorstyle_order,base.group_user,1,1,1,1

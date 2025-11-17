@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: odoo17-tailorstyle
+    env: docker
+    dockerfilePath: ./Dockerfile
+    buildCommand: ""
+    startCommand: ""
+    envVars:
+      - key: RENDER_DB_HOST
+        fromDatabase:
+          name: odoo17-db
+          property: host
+      - key: RENDER_DB_PORT
+        fromDatabase:
+          name: odoo17-db
+          property: port
+      - key: RENDER_DB_USER
+        fromDatabase:
+          name: odoo17-db
+          property: user
+      - key: RENDER_DB_PASSWORD
+        fromDatabase:
+          name: odoo17-db
+          property: password
+      - key: RENDER_DB_NAME
+        value: tailor_style
+
+databases:
+  - name: odoo17-db
+    databaseName: tailor_style
+    plan: free

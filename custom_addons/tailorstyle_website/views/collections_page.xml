@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template t-name="tailorstyle_website.collections_page">
+
+        <h2 class="text-center my-4" style="color: darkblue; text-align: center; margin-top: 20px; font-weight: bold;">
+            OUR COLLECTIONS
+        </h2>
+
+        <div style="width: 100%; display: flex; justify-content: flex-end; margin-top: 10px; margin-bottom: 20px;">
+            <a href="/my_orders" style="color: red; text-decoration: none; font-weight: bold;  margin-right: 20px;">My Orders</a>
+        </div>
+
+
+        <style>
+            /* ----- CARD GRID RESPONSIVE ----- */
+            .cloth-grid {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 20px;
+            }
+
+            @media (max-width: 768px) {
+                .cloth-grid {
+                    grid-template-columns: repeat(3, 1fr);
+                }
+            }
+
+            @media (max-width: 480px) {
+                .cloth-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+            }
+
+            /* ----- CARD STYLING ----- */
+            .cloth-card {
+                background: #dfd5d5ff;
+                border: 1px solid #d3d3d3;
+                border-radius: 20px;
+                padding: 15px;
+                text-align: center;
+                position: relative;   /* IMPORTANT FOR BADGE */
+                transition: 0.3s;
+
+                display: flex;
+                flex-direction: column;
+            }
+
+            .cloth-card:hover {
+                transform: scale(1.02);
+                background: #f1e9e9ff;
+            }
+
+            /* Fixed-size images */
+            .cloth-img {
+                width: 123px !important;
+                height: 179px !important;
+                object-fit: cover;
+                border-radius: 6px;
+                cursor: pointer;
+                display: block;
+                margin: 20px auto 0 auto;
+            }
+
+            /* Stock Badge */
+            .stock-badge {
+                position: absolute;
+                top: 8px;
+                right: 8px;
+                background: red;
+                color: white;
+                border-radius: 50%;
+                padding: 5px 10px;
+                font-weight: bold;
+                z-index: 5;
+            }
+
+            /* ORDER BUTTON */
+            .order-btn, .out-btn {
+                margin-top: auto;  /* push to bottom */
+                display: flex;      /* use flex to behave like button */
+                justify-content: center;  /* center text */
+                align-items: center;      /* vertical center text */
+                width: 100%;
+                padding: 10px;
+                font-weight: bold;
+                border-radius: 6px;
+                text-decoration: none !important; /* remove underline */
+                box-sizing: border-box; 
+            }
+
+            .order-btn {
+                background: green !important;
+                color: white !important;
+            }
+
+            .out-btn {
+                background: grey !important;
+                color: white !important;
+            }
+
+            /* FULLSCREEN LIGHTBOX */
+            #lightbox-img {
+                width: 100vw;
+                height: 100vh;
+                object-fit: contain !important;
+            }
+
+            .lightbox-btn {
+                background: none;
+                border: none;
+                color: white;
+                font-size: 2.5rem;
+                cursor: pointer;
+                padding: 10px 25px;
+                font-weight: bold;
+            }
+        </style>
+
+        <!-- GRID WRAPPER -->
+        <div class="cloth-grid">
+            <t t-foreach="clothes" t-as="cloth">
+                <div class="cloth-card">
+
+                    <!-- Stock Badge -->
+                    <span class="stock-badge" style="background: black; color: white;">
+                        <t t-esc="cloth.stock"/>
+                    </span>
+
+                    <!-- Image -->
+                    <img 
+                        t-att-src="'/web/image/tailorstyle.cloth/%s/main_image' % cloth.id"
+                        class="cloth-img"
+                        t-att-data-main="'/web/image/tailorstyle.cloth/%s/main_image' % cloth.id"
+                        t-att-data-sub="'/web/image/tailorstyle.cloth/%s/sub_image' % cloth.id"
+                    />
+
+                    <!-- Cloth Details -->
+                    <h5 style="margin-top: 10px;"><t t-esc="cloth.name"/></h5>
+                    <p>Material: <t t-esc="cloth.material"/></p>
+                    <p>Price: ₹<t t-esc="cloth.price"/></p>
+
+                    <p t-if="cloth.comments">
+                         <t t-esc="cloth.comments"/>
+                    </p>
+
+                    <!-- ORDER BUTTON -->
+                    <a t-if="cloth.stock > 0"
+                       t-att-href="'/order/%s' % cloth.id"
+                       class="order-btn">
+                       ORDER NOW
+                    </a>
+
+                    <!-- OUT OF STOCK BUTTON -->
+                    <button t-if="cloth.stock == 0"
+                        class="out-btn"
+                        disabled="disabled">
+                        OUT OF STOCK
+                    </button>
+
+                </div>
+            </t>
+        </div>
+
+        <!-- LIGHTBOX -->
+        <div id="lightbox"
+             style="display:none;
+             position:fixed;
+             top:0; left:0;
+             width:100vw; height:100vh;
+             background: rgba(0,0,0,0.95);
+             justify-content:center;
+             align-items:center;
+             z-index:10000;
+             flex-direction:column;
+             overflow:hidden;">
+
+            <button onclick="closeLightbox()"
+                style="position:absolute;
+                top:20px; right:30px;
+                font-size:2rem;
+                color:white;
+                background:none;
+                border:none;
+                cursor:pointer;">
+                ✕
+            </button>
+
+            <img id="lightbox-img" src="" />
+
+            <div style="position:absolute; bottom:20px; display:flex; gap:60px;">
+                <button onclick="prevImage()" class="lightbox-btn">←</button>
+                <button onclick="nextImage()" class="lightbox-btn">→</button>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+        <![CDATA[
+            var images = [];
+            var currentIndex = 0;
+
+            document.addEventListener('DOMContentLoaded', function() {
+
+                document.querySelectorAll('.cloth-img').forEach(function(img) {
+                    img.addEventListener('click', function() {
+
+                        images = [];
+                        if (this.dataset.main) { images.push(this.dataset.main); }
+                        if (this.dataset.sub) { images.push(this.dataset.sub); }
+
+                        currentIndex = 0;
+                        showImage();
+
+                        document.getElementById('lightbox').style.display = 'flex';
+                    });
+                });
+            });
+
+            function showImage() {
+                document.getElementById('lightbox-img').src = images[currentIndex];
+            }
+
+            function nextImage() {
+                if (currentIndex < images.length - 1) {
+                    currentIndex++;
+                    showImage();
+                }
+            }
+
+            function prevImage() {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    showImage();
+                }
+            }
+
+            function closeLightbox() {
+                document.getElementById('lightbox').style.display = 'none';
+            }
+        ]]>
+        </script>
+
+    </template>
+</odoo>

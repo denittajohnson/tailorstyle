@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template t-name="tailorstyle_website.orders_page">
+
+        <style>
+            /* -------- PAGE TITLE -------- */
+            .orders-title {
+                color: #006400; /* Dark Green */
+                font-size: 28px;
+                font-weight: bold;
+                text-align: center;
+                margin-top: 20px;
+                margin-bottom: 20px; /* increased space below title */
+            }
+
+            /* -------- TOP BUTTONS -------- */
+            .orders-top-buttons {
+                text-align: right;
+                margin-right: 25px;
+                margin-bottom: 25px; /* fixed space between buttons and table */
+            }
+
+            .orders-top-buttons a {
+                background: #0d097eff;
+                color: white !important;
+                padding: 8px 16px;
+                border-radius: 6px;
+                margin-left: 12px; /* fixed space between Home and Collections */
+                text-decoration: none !important;
+                font-size: 15px;
+            }
+
+            /* -------- TABLE CONTAINER -------- */
+            .orders-table-wrapper {
+                width: 100%;
+                overflow-x: auto;
+            }
+
+            .orders-table {
+                width: 100%;
+                border-collapse: collapse !important;
+                min-width: 700px; /* prevent breaking on small devices */
+            }
+
+            .orders-table th {
+                text-align: center;
+                color: black;
+                font-weight: bold;
+                padding: 10px 5px;
+                border: none !important; /* hide table borders */
+                white-space: nowrap;
+            }
+
+            .orders-table td {
+                text-align: center;
+                padding: 10px 5px;
+                border: none !important; /* hide table borders */
+                white-space: nowrap;
+            }
+
+            /* -------- CANCEL BUTTON -------- */
+            .cancel-btn {
+                background: red;
+                color: white !important;
+                padding: 6px 12px;
+                border-radius: 5px;
+                text-decoration: none !important;
+                font-size: 14px;
+            }
+            .pay-btn{
+                background: green;
+                color: white !important;
+                padding: 6px 12px;
+                border-radius: 5px;
+                text-decoration: none !important;
+                font-size: 14px;
+            }
+
+            /* -------- RESPONSIVE RULES -------- */
+            @media (max-width: 768px) {
+                .orders-title {
+                    font-size: 24px;
+                }
+
+                .orders-top-buttons {
+                    text-align: center;
+                    margin-right: 0;
+                }
+
+                .orders-top-buttons a {
+                    display: inline-block;
+                    margin: 5px;
+                    width: 42%;
+                    text-align: center;
+                }
+            }
+
+            @media (max-width: 480px) {
+                .orders-title {
+                    font-size: 22px;
+                }
+
+                .orders-top-buttons a {
+                    width: 100%;
+                    margin: 5px 0;
+                }
+
+                .orders-table {
+                    min-width: 600px;
+                }
+            }
+        </style>
+
+        <!-- PAGE TITLE -->
+        <h2 class="orders-title">MY ORDERS</h2>
+
+        <!-- TOP RIGHT BUTTONS -->
+        <div class="orders-top-buttons">
+            <a href="/">Home</a>
+            <a href="/collections">Collections</a>
+        </div>
+
+        <!-- TABLE WRAPPER FOR RESPONSIVE SCROLL -->
+        <div class="orders-table-wrapper">
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Date</th>
+                        <th>Cloth ID</th>
+                        <th>Image</th>
+                        <th>Price</th>
+                        <th>Urgent/Not</th>
+                        <th>Status</th>
+                        <th>Pay/Cancel</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <t t-foreach="orders" t-as="order">
+                        <tr>
+                            <td><t t-esc="order.order_id"/></td>
+
+                            <!-- DATE FORMAT DD-MM-YYYY -->
+                            <td>
+                                <t t-if="order.date_of_order">
+                                    <t t-esc="order.date_of_order.strftime('%d-%m-%Y')"/>
+                                </t>
+                            </td>
+
+                            <td><t t-esc="order.cloth_id.cloth_code"/></td>
+
+                            <!-- IMAGE -->
+                            <td>
+                                <img t-att-src="'/web/image/tailorstyle.cloth/%s/main_image' % order.cloth_id.id"
+                                     style="width:50px; height:50px; border-radius:4px;"/>
+                            </td>
+
+                            <td><t t-esc="order.price"/></td>
+
+                            <!-- URGENT DATE OR NOT -->
+                            <td>
+                                <t t-if="order.is_urgent">
+                                    <t t-if="order.urgent_date">
+                                        <t t-esc="order.urgent_date.strftime('%d-%m-%Y')"/>
+                                    </t>
+                                </t>
+                                <t t-else="">
+                                    Not Urgent
+                                </t>
+                            </td>
+
+                            <td><t t-esc="order.status"/></td>
+
+                            <!-- CANCEL BUTTON -->
+                            <td>
+                                <t t-if="order.status == 'ordered'">
+                                    <form t-att-action="'/my_orders/cancel/%s' % order.id" method="post" style="display:inline;">
+                                        <button type="submit" class="cancel-btn" t-att-data-id="order.id">Cancel</button>
+                                    </form>
+                                </t>
+                                <t t-elif="order.status in ['processing', 'done']">
+                                    <button type="button" class="pay-btn">Pay</button>
+                                </t>
+                                <t t-else="">
+                                    <span>-</span>
+                                </t>
+                            </td>
+
+
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+        </div>
+
+        <script type="text/javascript">
+            <![CDATA[
+            odoo.define('tailorstyle_website.cancel_order', function (require) {
+                "use strict";
+                var ajax = require('web.ajax');
+
+                document.querySelectorAll('.cancel-btn').forEach(function(btn){
+                    btn.addEventListener('click', function(event){
+                        event.preventDefault();  // prevent default form submit
+                        var orderId = btn.dataset.id;
+                        ajax.post('/my_orders/cancel/' + orderId, {}).then(function(){
+                            btn.innerText = '-';
+                            btn.disabled = true;
+                            btn.closest('tr').querySelector('td:nth-child(7)').innerText = 'cancelled';
+                        });
+                    });
+                });
+            });
+            ]]>
+        </script>
+
+    </template>
+</odoo>

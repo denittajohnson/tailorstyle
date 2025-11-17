@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Main Menu: TailorStyle Management -->
+    <record id="menu_tailorstyle_root" model="ir.ui.menu">
+        <field name="name">TailorStyle Management</field>
+        <field name="sequence">1</field>
+    </record>
+
+    <!-- Submenu: Users -->
+    <record id="menu_tailorstyle_user" model="ir.ui.menu">
+        <field name="name">User Details</field>
+        <field name="parent_id" ref="menu_tailorstyle_root"/>
+        <field name="action" ref="action_tailorstyle_user"/>
+        <field name="sequence">1</field>
+    </record>
+
+    <!-- Submenu: Cloths -->
+    <record id="menu_tailorstyle_cloth" model="ir.ui.menu">
+        <field name="name">Cloth Details</field>
+        <field name="parent_id" ref="menu_tailorstyle_root"/>
+        <field name="action" ref="action_tailorstyle_cloth"/>
+        <field name="sequence">2</field>
+    </record>
+
+    <!-- Submenu: Orders -->
+    <record id="menu_tailorstyle_order" model="ir.ui.menu">
+        <field name="name">Order Tracking</field>
+        <field name="parent_id" ref="menu_tailorstyle_root"/>
+        <field name="action" ref="action_tailorstyle_order"/>
+        <field name="sequence">3</field>
+    </record>
+
+    <!-- Actions for each model -->
+    <record id="action_tailorstyle_user" model="ir.actions.act_window">
+        <field name="name">Users</field>
+        <field name="res_model">tailorstyle.user</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_tailorstyle_cloth" model="ir.actions.act_window">
+        <field name="name">Cloths</field>
+        <field name="res_model">tailorstyle.cloth</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_tailorstyle_order" model="ir.actions.act_window">
+        <field name="name">Orders</field>
+        <field name="res_model">tailorstyle.order</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,128 @@
+<odoo>
+    <template id="homepage" name="TailorStyle Home Page">
+        <section class="homepage-section">
+            <!-- Centered Content -->
+            <div class="homepage-content">
+                <h1 class="homepage-title">Welcome to TailorStyle</h1>
+                <h4 class="homepage-subtitle">Welcome <span class="admin-highlight">Admin</span></h4>
+
+                <!-- Buttons Row -->
+                <div class="homepage-buttons">
+                    <a href="/users" class="homepage-btn">User Details</a>
+                    <a href="/cloths" class="homepage-btn">Manage Products</a>
+                    <a href="/orders" class="homepage-btn">Manage Orders</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Styles -->
+        <style>
+            /* Full-screen background */
+            .homepage-section {
+                background-image: url('/tailorstyle_website/static/src/img/bg.jpg');
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+                height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+
+            /* Centered content */
+            .homepage-content {
+                color: white;
+            }
+
+            .homepage-title {
+                font-size: 4rem;
+                font-family: 'Brush Script MT', cursive;
+                margin-bottom: 15px;
+                text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+            }
+
+            .homepage-subtitle {
+                font-size: 1.8rem;
+                margin-bottom: 30px;
+                text-shadow: 1px 1px 5px rgba(0,0,0,0.6);
+            }
+
+            .admin-highlight {
+                color: yellow;
+            }
+
+            /* Buttons row */
+            .homepage-buttons {
+                display: flex;
+                gap: 20px;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .homepage-btn {
+                background-color: black;
+                color: white;
+                padding: 12px 25px;
+                border-radius: 7px;
+                text-decoration: none;
+                font-size: 1rem;
+                font-weight: bold;
+                transition: background 0.3s, transform 0.3s;
+            }
+
+            .homepage-btn:hover {
+                background-color: #333;
+                transform: translateY(-2px);
+            }
+
+            /* Responsive styles */
+            @media (max-width: 1024px) {
+                .homepage-title {
+                    font-size: 3rem;
+                }
+                .homepage-subtitle {
+                    font-size: 1.5rem;
+                }
+                .homepage-btn {
+                    font-size: 0.95rem;
+                    padding: 10px 20px;
+                }
+            }
+
+            @media (max-width: 768px) {
+                .homepage-title {
+                    font-size: 2.5rem;
+                }
+                .homepage-subtitle {
+                    font-size: 1.3rem;
+                }
+                .homepage-buttons {
+                    gap: 15px;
+                }
+                .homepage-btn {
+                    padding: 8px 18px;
+                    font-size: 0.9rem;
+                }
+            }
+
+            @media (max-width: 480px) {
+                .homepage-title {
+                    font-size: 2rem;
+                }
+                .homepage-subtitle {
+                    font-size: 1.1rem;
+                }
+                .homepage-buttons {
+                    flex-direction: column;
+                    gap: 10px;
+                }
+                .homepage-btn {
+                    padding: 6px 15px;
+                    font-size: 0.85rem;
+                }
+            }
+        </style>
+    </template>
+</odoo>

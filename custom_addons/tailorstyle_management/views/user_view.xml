@@ -1,0 +1,42 @@
+<odoo>
+    <!-- User Tree View -->
+    <record id="view_tailorstyle_user_tree" model="ir.ui.view">
+        <field name="name">tailorstyle.user.tree</field>
+        <field name="model">tailorstyle.user</field>
+        <field name="arch" type="xml">
+            <tree string="User Details">
+                <field name="user_id"/>
+                <field name="name"/>
+                <field name="place"/>
+                <field name="phone"/>
+                <field name="password"/>
+                <field name="total_orders" readonly="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- User Form View -->
+    <record id="view_tailorstyle_user_form" model="ir.ui.view">
+        <field name="name">tailorstyle.user.form</field>
+        <field name="model">tailorstyle.user</field>
+        <field name="arch" type="xml">
+            <form string="User Details">
+                <sheet>
+                    <div style="max-width:500px; margin:auto; border:1px solid #ddd; padding:20px; border-radius:10px; background:#fafafa; box-sizing:border-box;">
+                        <group col="1" style="margin-bottom:15px;"><field name="name" placeholder="Name"/></group>
+                        <group col="1" style="margin-bottom:15px;"><field name="place" placeholder="Place"/></group>
+                        <group col="1" style="margin-bottom:15px;"><field name="phone" placeholder="Phone Number"/></group>
+                        <group col="1" style="margin-bottom:15px;"><field name="password" placeholder="Password"/></group>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- User Action -->
+    <record id="action_tailorstyle_user" model="ir.actions.act_window">
+        <field name="name">User Details</field>
+        <field name="res_model">tailorstyle.user</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

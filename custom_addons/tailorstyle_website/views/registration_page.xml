@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template t-name="tailorstyle_website.registration_page">
+        
+        <style>
+            /* Centering the wrapper */
+            .register-wrapper {
+                min-height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 20px;
+            }
+
+            /* Main registration box */
+            .register-box {
+                width: 100%;
+                max-width: 420px;
+                background: white;
+                border: 3px solid darkgreen;
+                border-radius: 10px;
+                padding: 30px;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            }
+
+            .register-title {
+                text-align: center;
+                font-size: 28px;
+                color: green;
+                margin-bottom: 25px;
+                font-weight: bold;
+            }
+
+            /* Inputs */
+            .reg-input {
+                width: 100%;
+                padding: 12px;
+                border-radius: 6px;
+                border: 2px solid red !important;
+                margin-bottom: 15px;
+                font-size: 16px;
+            }
+
+            .reg-input::placeholder {
+                color: #bfbfbf;
+                font-size: 15px;
+            }
+
+            /* Register Button */
+            .reg-btn {
+                width: 100%;
+                background: green;
+                color: white;
+                padding: 12px;
+                font-size: 18px;
+                border-radius: 6px;
+                border: none;
+                margin-top: 10px;
+                font-weight: bold;
+                cursor: pointer;
+            }
+
+            /* Success Message Box */
+            .success-box {
+                width: 100%;
+                max-width: 400px;
+                background: #e8ffe8;
+                padding: 25px;
+                border: 3px solid green;
+                border-radius: 10px;
+                text-align: center;
+            }
+
+            /* Red button with NO underline */
+            .home-link {
+                background: red;
+                color: white !important;
+                padding: 10px 18px;
+                border-radius: 6px;
+                font-weight: bold;
+                text-decoration: none !important;
+                display: inline-block;
+                margin-top: 10px;
+            }
+        </style>
+
+        <div class="register-wrapper">
+
+            <!-- SUCCESS MODE: Show only success box, hide form -->
+            <t t-if="registration_success">
+                <div class="success-box">
+                    <h3 style="margin-bottom:10px;">Registration Successful!</h3>
+                    <p>Welcome, <b><t t-esc="name"/></b> 🎉</p>
+
+                    <a href="/" class="home-link">Go to Home</a>
+                </div>
+            </t>
+
+            <!-- NORMAL MODE: Show form only if no success -->
+            <t t-if="not registration_success">
+
+                <div class="register-box">
+
+                    <!-- User Already Exists -->
+                    <t t-if="already_registered">
+                        <div style="padding: 20px; border: 2px solid orange; border-radius: 10px; background: #fff4e5; margin-bottom: 15px;">
+                            <h4>User Already Registered!</h4>
+                            <p>The phone number <b><t t-esc="user.phone"/></b> is already registered.</p>
+                        </div>
+                    </t>
+
+                    <!-- Error Box -->
+                    <t t-if="error">
+                        <div style="padding: 15px; border: 2px solid red; border-radius: 10px; background: #ffe8e8; margin-bottom: 15px;">
+                            <b>Error:</b> <t t-esc="error"/>
+                        </div>
+                    </t>
+
+                    <!-- Title -->
+                    <div class="register-title">Register</div>
+
+                    <!-- Registration Form -->
+                    <form action="/register/submit" method="post">
+
+                        <input type="text"
+                            name="name"
+                            class="reg-input"
+                            placeholder="Enter your name"
+                            required="required"/>
+
+                        <input type="text"
+                            name="phone"
+                            class="reg-input"
+                            maxlength="10"
+                            pattern="\d{10}"
+                            placeholder="10-digit phone number"
+                            required="required"/>
+
+                        <input type="text"
+                            name="place"
+                            class="reg-input"
+                            placeholder="Enter your place"
+                            required="required"/>
+
+                        <input type="password"
+                            name="password"
+                            class="reg-input"
+                            placeholder="Enter your password"
+                            required="required"/>
+
+                        <button type="submit" class="reg-btn">Register</button>
+
+                    </form>
+
+                </div>
+            </t>
+
+        </div>
+    </template>
+</odoo>
+
+
+
+

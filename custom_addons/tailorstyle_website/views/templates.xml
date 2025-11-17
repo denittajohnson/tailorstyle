@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template t-name="tailorstyle_website.templates">
+        <t t-call="website.layout">
+            <div class="container">
+                <header class="d-flex justify-content-between align-items-center mt-3 mb-3">
+                    <h1><a href="/">TailorStyle</a></h1>
+                    <nav>
+                        <a href="/">Home</a> |
+                        <a href="/collections">Collections</a> |
+                        <a href="/my_orders">My Orders</a> |
+                        <a href="/register">Register</a>
+                    </nav>
+                </header>
+
+                <t t-raw="0"/> <!-- page content will be injected here -->
+
+                <footer class="text-center mt-5 mb-3">
+                    <p>© 2025 TailorStyle. All rights reserved.</p>
+                </footer>
+            </div>
+        </t>
+    </template>
+</odoo>

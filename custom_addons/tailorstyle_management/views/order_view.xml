@@ -1,0 +1,52 @@
+<odoo>
+    <!-- Order Tree View -->
+    <record id="view_tailorstyle_order_tree" model="ir.ui.view">
+        <field name="name">tailorstyle.order.tree</field>
+        <field name="model">tailorstyle.order</field>
+        <field name="arch" type="xml">
+            <tree string="Order Tracking" editable="bottom">
+                <field name="date_of_order"/>
+                <field name="order_id"/>
+                <field name="user_code" string="User ID"/>
+                <field name="customer_name"/>
+                <field name="phone"/>
+                <field name="cloth_code"/>
+                <field name="cloth_id"/>
+                <field name="cloth_image" widget="image" options="{'size':(50,50)}"/>
+                <field name="is_urgent"/>
+                <field name="urgent_date"/>
+                <field name="bubbled"/>
+                <field name="status"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Order Form View -->
+    <record id="view_tailorstyle_order_form" model="ir.ui.view">
+        <field name="name">tailorstyle.order.form</field>
+        <field name="model">tailorstyle.order</field>
+        <field name="arch" type="xml">
+            <form string="Order Tracking">
+                <sheet>
+                    <div style="max-width:600px; margin:auto; border:1px solid #ddd; padding:20px; border-radius:10px; background:#fafafa; box-sizing:border-box;">
+                        <group col="1" style="margin-bottom:15px;"><field name="order_id" readonly="1"/></group>
+                        <group col="1" style="margin-bottom:15px;"><field name="user_id" string="User ID" readonly="1"/></group>
+                        <group col="1" style="margin-bottom:15px;"><field name="customer_name"/></group>
+                        <group col="1" style="margin-bottom:15px;"><field name="phone"/></group>
+                        <group col="1" style="margin-bottom:15px;"><field name="cloth_id"/></group>
+                        <group col="1" style="margin-bottom:15px;"><field name="is_urgent"/></group>
+                        <group col="1" style="margin-bottom:15px;"><field name="urgent_date"/></group>
+                        <group col="1" style="margin-bottom:15px;"><field name="status" widget="statusbar" statusbar_visible="ordered,processing,done,cancelled"/></group>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Order Action -->
+    <record id="action_tailorstyle_order" model="ir.actions.act_window">
+        <field name="name">Order Tracking</field>
+        <field name="res_model">tailorstyle.order</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>
