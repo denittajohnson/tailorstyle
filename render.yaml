@@ -6,13 +6,31 @@ services:
     dockerfilePath: ./Dockerfile
     # The build command is optional when using Dockerfile
     buildCommand: "" 
-    # CRITICAL: This command starts Odoo, points to the config file, 
-    # initializes the 'tailor_style' database, and installs your modules.
-    # It must be run exactly once on the initial deployment.
-    startCommand: "odoo -c /etc/odoo/odoo.conf --stop-after-init --database=tailor_style --addons-path=/usr/lib/python3/dist-packages/odoo/addons,/mnt/extra-addons --init=base,web,website,tailorstyle_management,tailorstyle_website && odoo -c /etc/odoo/odoo.conf"
+    # CRITICAL FIX: Pass DB parameters via command line flags for both init and regular start.
+    # The '>' allows the command to span multiple lines for readability.
+    startCommand: >
+      odoo 
+      -c /etc/odoo/odoo.conf 
+      --db-host=$DB_HOST 
+      --db-port=$DB_PORT 
+      --db-user=$DB_USER 
+      --db-password=$DB_PASSWORD 
+      --database=$DB_NAME 
+      --addons-path=/usr/lib/python3/dist-packages/odoo/addons,/mnt/extra-addons 
+      --init=base,web,website,tailorstyle_management,tailorstyle_website 
+      --stop-after-init 
+      && 
+      odoo 
+      -c /etc/odoo/odoo.conf 
+      --db-host=$DB_HOST 
+      --db-port=$DB_PORT 
+      --db-user=$DB_USER 
+      --db-password=$DB_PASSWORD 
+      --database=$DB_NAME 
+      --addons-path=/usr/lib/python3/dist-packages/odoo/addons,/mnt/extra-addons
     
     envVars:
-      # Renamed keys to match Odoo's default expected environment variables
+      # These keys are now referenced directly in the startCommand
       - key: DB_HOST
         fromDatabase:
           name: odoo17-db
@@ -31,13 +49,12 @@ services:
           property: password
       - key: DB_NAME
         value: tailor_style
-      # Added the master password for database management (Crucial for security)
+      # Master password for database management and security
       - key: ADMIN_PASSWD
         generateValue: true # Render will generate a strong secret password
-        
+
 databases:
   # The definition for your PostgreSQL database
   - name: odoo17-db
     databaseName: tailor_style
-    # Consider "standard" plan if 'free' is too slow or restrictive for Odoo
     plan: free
