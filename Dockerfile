@@ -5,7 +5,7 @@ FROM odoo:17
 COPY ./custom_addons /mnt/extra-addons
 
 # Copy Odoo configuration directly
-COPY ./odoo.conf.template /etc/odoo/odoo.conf
+COPY ./odoo.conf /etc/odoo/odoo.conf
 
 # Copy requirements.txt from root
 COPY ./requirements.txt /tmp/requirements.txt
