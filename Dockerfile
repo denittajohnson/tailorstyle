@@ -4,8 +4,8 @@ FROM odoo:17
 # Copy custom modules into Odoo
 COPY ./custom_addons /mnt/extra-addons
 
-# Copy Odoo configuration
-COPY ./odoo.conf /etc/odoo/odoo.conf
+# Copy Odoo configuration template
+COPY ./odoo.conf.template /etc/odoo/odoo.conf.template
 
 # Copy requirements.txt from root
 COPY ./requirements.txt /tmp/requirements.txt
@@ -15,4 +15,5 @@ RUN pip install -r /tmp/requirements.txt
 
 EXPOSE 8069
 
-CMD ["odoo", "-c", "/etc/odoo/odoo.conf"]
+# Replace environment variables and start Odoo
+CMD envsubst < /etc/odoo/odoo.conf.template > /etc/odoo/odoo.conf && odoo -c /etc/odoo/odoo.conf
