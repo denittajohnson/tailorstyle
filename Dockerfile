@@ -17,12 +17,10 @@ RUN pip install --no-cache-dir -r /tmp/requirements.txt
 EXPOSE 8069
 
 # Start Odoo using environment variables for DB and admin password
-CMD ["sh", "-c", "\
-odoo -c /etc/odoo/odoo.conf \
---db_host=${DB_HOST} \
---db_port=${DB_PORT} \
---db_user=${DB_USER} \
---db_password=${DB_PASSWORD} \
---db_name=${DB_NAME} \
---admin_passwd=${ADMIN_PASSWD} \
-"]
+CMD ["sh", "-c", "odoo -c /etc/odoo/odoo.conf \
+--db_host=$DB_HOST \
+--db_port=$DB_PORT \
+--db_user=$DB_USER \
+--db_password=$DB_PASSWORD \
+--db_name=$DB_NAME \
+--admin_passwd=$ADMIN_PASSWD"]
