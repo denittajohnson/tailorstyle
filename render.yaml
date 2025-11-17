@@ -1,13 +1,12 @@
-# Defines the services and infrastructure for your application on Render
 services:
   - type: web
     name: odoo17-tailorstyle
     env: docker
     dockerfilePath: ./Dockerfile
-    # The build command is optional when using Dockerfile
     buildCommand: "" 
-    # CRITICAL FIX: Pass DB parameters via command line flags for both init and regular start.
-    # The '>' allows the command to span multiple lines for readability.
+    # The start command is composed of two parts:
+    # 1. Initialization/Installation (--init and --stop-after-init)
+    # 2. Regular startup (The second Odoo call after '&&')
     startCommand: >
       odoo 
       -c /etc/odoo/odoo.conf 
@@ -30,7 +29,7 @@ services:
       --addons-path=/usr/lib/python3/dist-packages/odoo/addons,/mnt/extra-addons
     
     envVars:
-      # These keys are now referenced directly in the startCommand
+      # Database connection variables linked from the Render PostgreSQL service
       - key: DB_HOST
         fromDatabase:
           name: odoo17-db
@@ -49,12 +48,11 @@ services:
           property: password
       - key: DB_NAME
         value: tailor_style
-      # Master password for database management and security
+      # Master password for security and database administration
       - key: ADMIN_PASSWD
-        generateValue: true # Render will generate a strong secret password
+        generateValue: true
 
 databases:
-  # The definition for your PostgreSQL database
   - name: odoo17-db
     databaseName: tailor_style
     plan: free
