@@ -1,31 +1,43 @@
+# Defines the services and infrastructure for your application on Render
 services:
   - type: web
     name: odoo17-tailorstyle
     env: docker
     dockerfilePath: ./Dockerfile
-    buildCommand: ""
-    startCommand: ""
+    # The build command is optional when using Dockerfile
+    buildCommand: "" 
+    # CRITICAL: This command starts Odoo, points to the config file, 
+    # initializes the 'tailor_style' database, and installs your modules.
+    # It must be run exactly once on the initial deployment.
+    startCommand: "odoo -c /etc/odoo/odoo.conf --stop-after-init --database=tailor_style --addons-path=/usr/lib/python3/dist-packages/odoo/addons,/mnt/extra-addons --init=base,web,website,tailorstyle_management,tailorstyle_website && odoo -c /etc/odoo/odoo.conf"
+    
     envVars:
-      - key: RENDER_DB_HOST
+      # Renamed keys to match Odoo's default expected environment variables
+      - key: DB_HOST
         fromDatabase:
           name: odoo17-db
           property: host
-      - key: RENDER_DB_PORT
+      - key: DB_PORT
         fromDatabase:
           name: odoo17-db
           property: port
-      - key: RENDER_DB_USER
+      - key: DB_USER
         fromDatabase:
           name: odoo17-db
           property: user
-      - key: RENDER_DB_PASSWORD
+      - key: DB_PASSWORD
         fromDatabase:
           name: odoo17-db
           property: password
-      - key: RENDER_DB_NAME
+      - key: DB_NAME
         value: tailor_style
-
+      # Added the master password for database management (Crucial for security)
+      - key: ADMIN_PASSWD
+        generateValue: true # Render will generate a strong secret password
+        
 databases:
+  # The definition for your PostgreSQL database
   - name: odoo17-db
     databaseName: tailor_style
+    # Consider "standard" plan if 'free' is too slow or restrictive for Odoo
     plan: free
