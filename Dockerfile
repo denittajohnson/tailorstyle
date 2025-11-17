@@ -28,7 +28,18 @@ CMD odoo \
   --db_password=$DB_PASSWORD \
   --database=$DB_NAME \
   --addons-path=/usr/lib/python3/dist-packages/odoo/addons,/mnt/extra-addons \
-  --init=base,web,website,tailorstyle_management,tailorstyle_website \
+  --init=base \
+  --stop-after-init \
+  && \
+  odoo \
+  -c /etc/odoo/odoo.conf \
+  --db_host=$DB_HOST \
+  --db_port=$DB_PORT \
+  --db_user=$DB_USER \
+  --db_password=$DB_PASSWORD \
+  --database=$DB_NAME \
+  --addons-path=/usr/lib/python3/dist-packages/odoo/addons,/mnt/extra-addons \
+  --init=web,website,tailorstyle_management,tailorstyle_website \
   --stop-after-init \
   && \
   odoo \
