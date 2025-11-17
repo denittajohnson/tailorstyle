@@ -7,26 +7,7 @@ services:
     # The start command is composed of two parts:
     # 1. Initialization/Installation (--init and --stop-after-init)
     # 2. Regular startup (The second Odoo call after '&&')
-    startCommand: >
-      odoo 
-      -c /etc/odoo/odoo.conf 
-      --db-host=$DB_HOST 
-      --db-port=$DB_PORT 
-      --db-user=$DB_USER 
-      --db-password=$DB_PASSWORD 
-      --database=$DB_NAME 
-      --addons-path=/usr/lib/python3/dist-packages/odoo/addons,/mnt/extra-addons 
-      --init=base,web,website,tailorstyle_management,tailorstyle_website 
-      --stop-after-init 
-      && 
-      odoo 
-      -c /etc/odoo/odoo.conf 
-      --db-host=$DB_HOST 
-      --db-port=$DB_PORT 
-      --db-user=$DB_USER 
-      --db-password=$DB_PASSWORD 
-      --database=$DB_NAME 
-      --addons-path=/usr/lib/python3/dist-packages/odoo/addons,/mnt/extra-addons
+    
     
     envVars:
       # Database connection variables linked from the Render PostgreSQL service

@@ -1,25 +1,42 @@
-# Use official Odoo 17 image
 FROM odoo:17
 
-# Copy custom modules into Odoo
+# Set the Odoo user for subsequent commands
+USER root
+
+# 1. Copy custom modules
 COPY ./custom_addons /mnt/extra-addons
 
-# Copy Odoo configuration template
+# 2. Copy Odoo configuration file
 COPY ./odoo.conf /etc/odoo/odoo.conf
 
-# Copy requirements.txt from root
+# 3. Copy Python requirements
 COPY ./requirements.txt /tmp/requirements.txt
 
-# Install any extra Python dependencies
+# 4. Install dependencies
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
-# Expose Odoo port
-EXPOSE 8069
+# Switch back to the Odoo user
+USER odoo
 
-# Start Odoo using environment variables for DB and admin password
-CMD ["sh", "-c", "odoo -c /etc/odoo/odoo.conf \
---db_host=$DB_HOST \
---db_port=$DB_PORT \
---db_user=$DB_USER \
---db_password=$DB_PASSWORD \
---admin_passwd=$ADMIN_PASSWD"]
+# CRITICAL FIX: The startup command must be defined here, NOT in render.yaml.
+# This command runs two Odoo processes: first to initialize the database, 
+# and second to start the web server for running the application.
+CMD odoo \
+  -c /etc/odoo/odoo.conf \
+  --db-host=$DB_HOST \
+  --db-port=$DB_PORT \
+  --db-user=$DB_USER \
+  --db-password=$DB_PASSWORD \
+  --database=$DB_NAME \
+  --addons-path=/usr/lib/python3/dist-packages/odoo/addons,/mnt/extra-addons \
+  --init=base,web,website,tailorstyle_management,tailorstyle_website \
+  --stop-after-init \
+  && \
+  odoo \
+  -c /etc/odoo/odoo.conf \
+  --db-host=$DB_HOST \
+  --db-port=$DB_PORT \
+  --db-user=$DB_USER \
+  --db-password=$DB_PASSWORD \
+  --database=$DB_NAME \
+  --addons-path=/usr/lib/python3/dist-packages/odoo/addons,/mnt/extra-addons
