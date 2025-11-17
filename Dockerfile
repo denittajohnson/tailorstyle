@@ -7,8 +7,11 @@ COPY ./custom_addons /mnt/extra-addons
 # Copy Odoo configuration
 COPY ./odoo.conf /etc/odoo/odoo.conf
 
+# Copy requirements.txt from root
+COPY ./requirements.txt /tmp/requirements.txt
+
 # Install any extra Python dependencies
-RUN pip install -r /mnt/extra-addons/requirements.txt
+RUN pip install -r /tmp/requirements.txt
 
 EXPOSE 8069
 
