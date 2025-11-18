@@ -37,14 +37,14 @@ USER odoo
 # CRITICAL FIX: Removed the --database=$DB_NAME argument.
 # Odoo will now launch and immediately display the Database Manager screen
 # because no database is explicitly specified to load.
-CMD odoo \
-  -c /etc/odoo/odoo.conf \
-  --db_host=$DB_HOST \
-  --db_port=$DB_PORT \
-  --db_user=$DB_USER \
-  --db_password=$DB_PASSWORD \
-  --addons-path=/usr/lib/python3/dist-packages/odoo/addons,/mnt/extra-addons \
-  --workers=1
+CMD ["odoo", "-c", "/etc/odoo/odoo.conf", \
+    "--db_host", "$(DB_HOST)", \
+    "--db_port", "$(DB_PORT)", \
+    "--db_user", "$(DB_USER)", \
+    "--db_password", "$(DB_PASSWORD)", \
+    "-i", "base", \
+    "--addons-path=/usr/lib/python3/dist-packages/odoo/addons,/mnt/extra-addons", \
+    "--workers=1"]
 
 # Odoo listens on port 8069
 EXPOSE 8069
