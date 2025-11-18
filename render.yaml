@@ -4,9 +4,7 @@ services:
     env: docker
     dockerfilePath: ./Dockerfile
     buildCommand: "" 
-    # The start command is composed of two parts:
-    # 1. Initialization/Installation (--init and --stop-after-init)
-    # 2. Regular startup (The second Odoo call after '&&')
+    startCommand: null
     
     
     envVars:
