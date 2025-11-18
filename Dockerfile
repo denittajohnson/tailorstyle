@@ -7,9 +7,9 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     libsasl2-dev \
     libxml2-dev \
-    libpq-dev \
     libldap2-dev \
     libxslt1-dev \
+    # libpq-dev REMOVED: It was causing a conflict with the existing PostgreSQL client library.
     sassc && \
     rm -rf /var/lib/apt/lists/*
 
