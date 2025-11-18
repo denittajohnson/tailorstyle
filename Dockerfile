@@ -3,6 +3,16 @@ FROM odoo:17
 # Set the Odoo user for subsequent commands
 USER root
 
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    libsasl2-dev \
+    libxml2-dev \
+    libpq-dev \
+    libldap2-dev \
+    libxslt1-dev \
+    sassc && \
+    rm -rf /var/lib/apt/lists/*
+
 # 1. Copy custom modules
 COPY ./custom_addons /mnt/extra-addons
 
